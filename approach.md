@@ -58,7 +58,7 @@ approach of letting the database generate the transactionId for us, as it would 
 #### Long and BigDecimal Decision
 
 While we're keeping it simple and my first approach was to use int and double for the transactionId and amount fields 
-respectively, I ended up using Long and BigDecimal instead, as using these types doesn't require any additional effort 
+respectively, I ended up using Long and BigDecimal instead, as using these types doesn't require any additional effort,
 and they are more appropriate for the use case, as they can handle larger values and BigDecimal is more precise than double.
 
 ## Data Persistence
@@ -144,4 +144,32 @@ problems and your thought process rather than a test of your technical knowledge
 even if it means having to make trade-offs.", I will still make use of Dependency Injection and Dependency Inversion Principle
 to ensure a clean separation of concerns and to facilitate testing.
 
+### Test Scenarios
+
+#### Automatic Tests
+
+Both Unit and Integration tests will be implemented, with the following scenarios being covered:
+- **FR1:** Record a new transaction (deposit or withdrawal)
+  - Valid deposit transaction
+  - Valid withdrawal transaction with sufficient funds
+  - Invalid transaction with missing or null amount
+  - Invalid transaction with amount less than or equal to zero
+  - Invalid transaction with missing or null transactionType
+  - Invalid transaction with unsupported transactionType
+  - Invalid withdrawal transaction with insufficient funds
+- **FR2:** View current balance
+  - View balance with no transactions (should return 0.0)
+  - View balance after a series of valid transactions (should return the correct balance)
+  - View balance at moment A, then record a new transaction at moment B, and view balance again (should return the correct balance at moment B)
+- **FR3:** View transaction history
+  - View transaction history with no transactions (should return an empty list)
+  - View transaction history after a series of valid transactions including both Deposits and Withdrawals
+(should return the correct list of transactions in reverse chronological order)
+
+#### Manual Tests
+
+Manual tests will also be performed through curl requests to the API endpoints, such
+curls, alongside with startup instructions, will be made available in the README.md file, 
+so that the reviewer can easily test the API endpoints,
+according to the [exercise document](exercise.md) instructions.
 
