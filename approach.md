@@ -166,6 +166,9 @@ Both Unit and Integration tests will be implemented, with the following scenario
   - View transaction history after a series of valid transactions including both Deposits and Withdrawals
 (should return the correct list of transactions in reverse chronological order)
 
+*All the tests should follow the Arrange-Act-Assert pattern, and the `shouldDoSomethingWhenSomething` pattern for naming the test methods,
+to clearly describe the scenario being tested.
+
 #### Manual Tests
 
 Manual tests will also be performed through curl requests to the API endpoints, such
