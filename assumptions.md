@@ -11,3 +11,5 @@ requests while maintaining data integrity.
 5. The transaction history should be returned in reverse chronological order, with the most recent transaction appearing first.
 6. The timestamp will be returned as a unix timestamp, in seconds, it assumes that the presentation layer would handle the
 conversion to a human-readable format if necessary.
+7. No DTOs or mappers will be implemented to keep it simple, the domain model will be used directly in the API layer. 
+Normally, it would be better to separate the domain model from the API layer.
