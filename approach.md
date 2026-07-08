@@ -35,7 +35,7 @@ that, and according to the requirements I envisioned the Transaction entity as t
 I considered three possible approaches for retrieving the current balance of the user:
 1. Keeping track of the current balance after each transaction in the transaction itself
 2. Keeping track of the current balance in a separate field in the ledger
-3. Going through all the records in the ledger each time the future ```viewCurrentBalance()``` endpoint is called
+3. Going through all the records in the ledger each time the future ```getCurrentBalance()``` endpoint is called
 
 After deliberating for a bit, I opted for the first approach, as that way to retrieve the balance is a simple O(1)
 operation, by just retrieving the last transaction in the ledger and returning its balanceAfterTransaction field.

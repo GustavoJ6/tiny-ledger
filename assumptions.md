@@ -18,3 +18,5 @@ Normally, it would be better to separate the domain model from the API layer.
 A persistence failure is treated as an exceptional case and throws an `IllegalStateException`, as `Optional.empty()` is
 already semantically reserved for business rule violations. In a real-world scenario, this would warrant a dedicated
 response code and proper error handling.
+9. Transactions that are not successful won't be recorded in the transaction history, and the balance will remain unchanged.
+An audit table or log would be a better approach to keep track of failed transactions, but this is not implemented in this tiny ledger application.
