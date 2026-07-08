@@ -14,8 +14,10 @@ public class InMemoryTransactionRepository implements TransactionRepository {
     private final Deque<Transaction> transactions = new ArrayDeque<>();
 
     @Override
-    public void save(Transaction transaction) {
+    public Optional<Transaction> save(Transaction transaction) {
         transactions.push(transaction);
+
+        return Optional.of(transaction);
     }
 
     @Override

@@ -14,3 +14,7 @@ To clarify, this was a decision made by me so that the user can see the most rec
 conversion to a human-readable format if necessary.
 7. No DTOs or mappers will be implemented to keep it simple, the domain model will be used directly in the API layer. 
 Normally, it would be better to separate the domain model from the API layer.
+8. The Transaction Service uses `Optional.empty()` to signal that a transaction could not be recorded (e.g. insufficient funds).
+A persistence failure is treated as an exceptional case and throws an `IllegalStateException`, as `Optional.empty()` is
+already semantically reserved for business rule violations. In a real-world scenario, this would warrant a dedicated
+response code and proper error handling.

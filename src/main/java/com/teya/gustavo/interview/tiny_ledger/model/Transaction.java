@@ -2,7 +2,7 @@ package com.teya.gustavo.interview.tiny_ledger.model;
 
 import java.math.BigDecimal;
 
-public record Transaction(Long id, long timestamp, TransactionType type, BigDecimal amount,
+public record Transaction(Long id, Long timestamp, TransactionType type, BigDecimal amount,
                           BigDecimal balanceAfterTransaction) {
 
     public Transaction {

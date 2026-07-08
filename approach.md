@@ -26,7 +26,7 @@ As per the first assumption in the [Assumptions document](assumptions.md), the l
 that, and according to the requirements I envisioned the Transaction entity as the following:
 
 - transactionId: Long - Unique identifier for the transaction
-- transactionTime: unix timestamp
+- transactionTime: unix timestamp in seconds - The time when the transaction was created
 - transactionType: TransactionTypeEnum (can be either DEPOSIT or WITHDRAWAL)
 - amount: BigDecimal
 - balanceAfterTransaction: BigDecimal
@@ -81,7 +81,7 @@ To ensure a good organization of the API, I designed a RESTful API with one endp
     - amount: BigDecimal
   - Response body:
     - transactionId: Long - Unique identifier for the transaction
-    - transactionTime: unix timestamp
+    - transactionTime: unix timestamp in seconds
     - transactionType: TransactionTypeEnum (can be either DEPOSIT or WITHDRAWAL)
     - amount: BigDecimal
     - balanceAfterTransaction: BigDecimal
@@ -120,9 +120,9 @@ src/
 ├── main/
 │   ├── java/
 │   │   └── com/teya/gustavo/interview/tiny_ledger/
-│   │       ├── controller/ # Controllers for the API endpoints
+│   │       ├── controller/ # Controller for the API endpoints
 │   │       ├── model/ # Domain models (Transaction, TransactionTypeEnum)
-│   │       ├── service/ # Services for business logic
+│   │       ├── service/ # Service for business logic (TransactionService)
 │   │       ├── persistence/ # In-memory data persistence
 │   │       └── application/ # Main application class
 │   └── resources/
