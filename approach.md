@@ -25,9 +25,9 @@ After understanding the scope of the problem and identifying the functional requ
 As per the first assumption in the [Assumptions document](assumptions.md), the ledger will only handle one user account, given
 that, and according to the requirements I envisioned the Transaction entity as the following:
 
-- transactionId: Long - Unique identifier for the transaction
-- transactionTime: unix timestamp in seconds - The time when the transaction was created
-- transactionType: TransactionTypeEnum (can be either DEPOSIT or WITHDRAWAL)
+- id: Long - Unique identifier for the transaction
+- timestamp: unix timestamp in seconds - The time when the transaction was created
+- type: TransactionType (can be either DEPOSIT or WITHDRAWAL)
 - amount: BigDecimal
 - balanceAfterTransaction: BigDecimal
 
@@ -45,19 +45,19 @@ for the scope of this project, and it also allows for a more detailed transactio
 have the balance after it was executed.
 
 #### Transaction ID Decision
-I considered two possible approaches for generating the transactionId field:
+I considered two possible approaches for generating the id field:
 1. Using a simple counter that increments with each new transaction
 2. Using a UUID
 
 Since on creation of a new transaction we already have to retrieve the last transaction in the ledger to get its
 balanceAfterTransaction field, I opted for the first approach, as it is simpler and slightly more efficient than generating a UUID.
 
-In a real world scenario, unless there was any specific requirement for the transactionId, I'd probably opt for the common
-approach of letting the database generate the transactionId for us, as it would be more robust and scalable than either of the two approaches I considered.
+In a real world scenario, unless there was any specific requirement for the id, I'd probably opt for the common
+approach of letting the database generate the id for us, as it would be more robust and scalable than either of the two approaches I considered.
 
 #### Long and BigDecimal Decision
 
-While we're keeping it simple and my first approach was to use int and double for the transactionId and amount fields 
+While we're keeping it simple and my first approach was to use int and double for the id and amount fields 
 respectively, I ended up using Long and BigDecimal instead, as using these types doesn't require any additional effort,
 and they are more appropriate for the use case, as they can handle larger values and BigDecimal is more precise than double.
 
@@ -77,34 +77,32 @@ To ensure a good organization of the API, I designed a RESTful API with one endp
 
 - **FR1:** POST /transactions - Records a new transaction (deposit or withdrawal)
   - Request body:
-    - transactionType: TransactionTypeEnum (can be either DEPOSIT or WITHDRAWAL)
+    - type: TransactionType (can be either DEPOSIT or WITHDRAWAL)
     - amount: BigDecimal
   - Response body:
-    - transactionId: Long - Unique identifier for the transaction
-    - transactionTime: unix timestamp in seconds
-    - transactionType: TransactionTypeEnum (can be either DEPOSIT or WITHDRAWAL)
+    - id: Long - Unique identifier for the transaction
+    - timestamp: unix timestamp in seconds
+    - type: TransactionType (can be either DEPOSIT or WITHDRAWAL)
     - amount: BigDecimal
     - balanceAfterTransaction: BigDecimal
   - Response codes:
     - 201 Created - Transaction created successfully
     - 400 Bad Request - Invalid request body. The following validation rules apply:
         - `amount` must be present, non-null, and greater than zero
-        - `transactionType` must be present and one of the supported values (`DEPOSIT` or `WITHDRAWAL`)
+        - `type` must be present and one of the supported values (`DEPOSIT` or `WITHDRAWAL`)
     - 422 Unprocessable Entity - Insufficient funds for withdrawal
 - **FR2:** GET /balance - Returns the current balance
-  - Response body:
-    - balance: BigDecimal
+  - Response body: a bare BigDecimal scalar (e.g. `120.00`)
   - Response codes:
     - 200 OK - Balance retrieved successfully
   - Edge case:
-    - If there are no transactions, the balance should be 0.0
+    - If there are no transactions, the balance should be 0
 - **FR3:** GET /transactions - Returns the transaction history in reverse chronological order
-    - Response body:
-        - transactions: List of transactions, each with all the fields described in the Transaction entity above
+    - Response body: a bare JSON array of transactions, each with all the fields described in the Transaction entity above
     - Response codes:
         - 200 OK - Transaction history retrieved successfully
     - Edge case:
-        - If there are no transactions, the response should be an empty list
+        - If there are no transactions, the response should be an empty array `[]`
     - Implementation note:
         - Since the in-memory store is implemented as a stack (most recent transaction on top), the endpoint simply
         iterates it from top to bottom, yielding reverse chronological order without any additional sorting or copying.
@@ -121,16 +119,17 @@ src/
 │   ├── java/
 │   │   └── com/teya/gustavo/interview/tiny_ledger/
 │   │       ├── controller/ # Controller for the API endpoints
-│   │       ├── model/ # Domain models (Transaction, TransactionTypeEnum)
+│   │       ├── model/ # Domain models (Transaction, TransactionType)
 │   │       ├── service/ # Service for business logic (TransactionService)
-│   │       ├── persistence/ # In-memory data persistence
-│   │       └── application/ # Main application class
+│   │       └── persistence/ # In-memory data persistence
 │   └── resources/
 │       └── application.properties # Application configuration
 └── test/
     └── java/
         └── com/teya/gustavo/interview/tiny_ledger/
             ├── controller/ # Tests for the API endpoints
+            ├── integration/ # End-to-end integration tests
+            ├── model/ # Tests for the domain model
             ├── service/ # Tests for the services
             └── persistence/ # Tests for the in-memory data persistence
 ```
@@ -154,8 +153,8 @@ Both Unit and Integration tests will be implemented, with the following scenario
   - Valid withdrawal transaction with sufficient funds
   - Invalid transaction with missing or null amount
   - Invalid transaction with amount less than or equal to zero
-  - Invalid transaction with missing or null transactionType
-  - Invalid transaction with unsupported transactionType
+  - Invalid transaction with missing or null type
+  - Invalid transaction with unsupported type
   - Invalid withdrawal transaction with insufficient funds
 - **FR2:** View current balance
   - View balance with no transactions (should return 0.0)

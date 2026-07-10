@@ -27,6 +27,13 @@ class TransactionTest {
     }
 
     @Test
+    void shouldThrowWhenTimestampIsNull() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> new Transaction(1L, null, TransactionType.DEPOSIT, new BigDecimal("100.00"), new BigDecimal("100.00")));
+        assertEquals("timestamp must not be null", ex.getMessage());
+    }
+
+    @Test
     void shouldThrowWhenTypeIsNull() {
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> new Transaction(1L, 1000L, null, new BigDecimal("100.00"), new BigDecimal("100.00")));

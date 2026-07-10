@@ -49,7 +49,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void shouldRecordDepositAndAccumulateBalance() {
+    void shouldAccumulateBalanceWhenDepositIsRecordedOnExistingLedger() {
         when(transactionRepository.findLast()).thenReturn(Optional.of(existingTransaction));
         when(transactionRepository.save(any())).thenAnswer(inv -> Optional.of(inv.getArgument(0)));
 
@@ -122,7 +122,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void shouldReturnBalanceFromLatestTransaction() {
+    void shouldReturnBalanceFromLatestTransactionWhenLedgerHasTransactions() {
         when(transactionRepository.findLast()).thenReturn(Optional.of(existingTransaction));
 
         BigDecimal balance = service.getCurrentBalance();
@@ -141,7 +141,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void shouldReturnAllTransactions() {
+    void shouldReturnAllTransactionsWhenLedgerHasTransactions() {
         Transaction second = new Transaction(2L, 2000L, TransactionType.WITHDRAWAL, new BigDecimal("30.00"), new BigDecimal("70.00"));
         when(transactionRepository.findAll()).thenReturn(List.of(second, existingTransaction));
 

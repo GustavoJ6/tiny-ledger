@@ -87,9 +87,10 @@ class LedgerIntegrationTest {
     }
 
     @Test
-    void shouldReturnZeroBalanceAndEmptyHistoryOnFreshLedger() throws Exception {
+    void shouldReturnZeroBalanceAndEmptyHistoryWhenLedgerIsEmpty() throws Exception {
         mockMvc.perform(get("/balance"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string("0"));
 
         mockMvc.perform(get("/transactions"))
                 .andExpect(status().isOk())

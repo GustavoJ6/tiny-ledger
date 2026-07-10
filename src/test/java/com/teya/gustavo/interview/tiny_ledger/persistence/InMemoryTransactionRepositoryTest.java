@@ -33,7 +33,7 @@ class InMemoryTransactionRepositoryTest {
     }
 
     @Test
-    void shouldReturnLatestTransactionAfterSave() {
+    void shouldReturnLatestTransactionWhenOneTransactionIsSaved() {
         Transaction transaction = new Transaction(1L, 1000L, TransactionType.DEPOSIT,
                 new BigDecimal("100.00"), new BigDecimal("100.00"));
 
@@ -45,7 +45,7 @@ class InMemoryTransactionRepositoryTest {
     }
 
     @Test
-    void shouldReturnMostRecentTransactionAsLatest() {
+    void shouldReturnMostRecentTransactionAsLatestWhenMultipleTransactionsAreSaved() {
         Transaction first = new Transaction(1L, 1000L, TransactionType.DEPOSIT,
                 new BigDecimal("100.00"), new BigDecimal("100.00"));
         Transaction second = new Transaction(2L, 2000L, TransactionType.DEPOSIT,
@@ -60,7 +60,7 @@ class InMemoryTransactionRepositoryTest {
     }
 
     @Test
-    void shouldReturnAllTransactionsInReverseChronologicalOrder() {
+    void shouldReturnAllTransactionsInReverseChronologicalOrderWhenMultipleTransactionsAreSaved() {
         Transaction first = new Transaction(1L, 1000L, TransactionType.DEPOSIT,
                 new BigDecimal("100.00"), new BigDecimal("100.00"));
         Transaction second = new Transaction(2L, 2000L, TransactionType.DEPOSIT,
@@ -80,7 +80,7 @@ class InMemoryTransactionRepositoryTest {
     }
 
     @Test
-    void shouldNotAffectRepositoryStateWhenModifyingReturnedList() {
+    void shouldThrowWhenModifyingReturnedList() {
         Transaction transaction = new Transaction(1L, 1000L, TransactionType.DEPOSIT,
                 new BigDecimal("100.00"), new BigDecimal("100.00"));
         repository.save(transaction);
