@@ -70,7 +70,7 @@ class TransactionControllerTest {
         mockMvc.perform(post("/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new TransactionRequest(TransactionType.WITHDRAWAL, new BigDecimal("999.00")))))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().is(422))
                 .andExpect(content().string("insufficient funds"));
     }
 

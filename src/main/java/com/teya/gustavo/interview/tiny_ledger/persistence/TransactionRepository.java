@@ -23,4 +23,6 @@ public interface TransactionRepository {
     Optional<Transaction> findLast();
 
     List<Transaction> findAll();
+
+    void clear();
 }

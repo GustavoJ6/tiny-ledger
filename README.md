@@ -29,12 +29,12 @@ The application will start on port 8080 by default.
 
 ```bash
 # Deposit
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "DEPOSIT", "amount": 100.00}'
 
 # Withdrawal
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "WITHDRAWAL", "amount": 40.00}'
 ```
@@ -42,46 +42,46 @@ curl -X POST http://localhost:8081/transactions \
 ### View current balance
 
 ```bash
-curl http://localhost:8081/balance
+curl http://localhost:8080/balance
 ```
 
 ### View transaction history
 
 ```bash
-curl http://localhost:8081/transactions
+curl http://localhost:8080/transactions
 ```
 
 ## Example flow
 
 ```bash
 # 1. Deposit 100.00
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "DEPOSIT", "amount": 100.00}'
 # Response (201): {"id":1,"timestamp":...,"type":"DEPOSIT","amount":100.00,"balanceAfterTransaction":100.00}
 
 # 2. Deposit another 50.00
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "DEPOSIT", "amount": 50.00}'
 # Response (201): {"id":2,"timestamp":...,"type":"DEPOSIT","amount":50.00,"balanceAfterTransaction":150.00}
 
 # 3. Withdraw 30.00
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "WITHDRAWAL", "amount": 30.00}'
 # Response (201): {"id":3,"timestamp":...,"type":"WITHDRAWAL","amount":30.00,"balanceAfterTransaction":120.00}
 
 # 4. Check balance
-curl http://localhost:8081/balance
+curl http://localhost:8080/balance
 # Response (200): 120.00
 
 # 5. View transaction history (most recent first)
-curl http://localhost:8081/transactions
+curl http://localhost:8080/transactions
 # Response (200): [{"id":3,...},{"id":2,...},{"id":1,...}]
 
 # 6. Attempt a withdrawal with insufficient funds
-curl -X POST http://localhost:8081/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -d '{"type": "WITHDRAWAL", "amount": 999.00}'
 # Response (422): insufficient funds

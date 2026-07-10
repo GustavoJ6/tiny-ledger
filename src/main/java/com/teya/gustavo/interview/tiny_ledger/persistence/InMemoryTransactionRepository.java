@@ -29,4 +29,9 @@ public class InMemoryTransactionRepository implements TransactionRepository {
     public List<Transaction> findAll() {
         return List.copyOf(transactions);
     }
+
+    @Override
+    public void clear() {
+        transactions.clear();
+    }
 }
